@@ -26,22 +26,31 @@ class Res():
       + '準備はいいか？野郎ども\n\n'
     )
 
-    instr = input(
-      'y: やってやろうじゃねぇか！\n'
-      's: 設定\n'
-      + 'q: やっぱ帰る\n'
+    return self.InputCheck(
+      input(
+        'y: やってやろうじゃねぇか！\n'
+        's: 設定\n'
+        + 'q: やっぱ帰る\n'
+      ), 0
     )
 
+
+  def InputCheck(self, instr, mode):
     if instr not in self.char_arr:
-      return self.Title()
+      if mode == 0:
+        return self.Title()
+
+      elif mode == 1:
+        os.system('clear')
+        return self.Continue()
+
+      else:
+        return print('Error!!\n\nmodeの値が不正です' )
 
     char_i = math.floor(self.char_arr.index(instr) / 2)
 
     if char_i == 0:
-      self.nums.Create(self.setting.digit, self.setting.count, self.setting.speed)
-      self.nums.View()
-
-      return self.Question()
+      return self.Start(True if mode == 0 else False)
 
     elif char_i == 1:
       self.setting.SettingTop()
@@ -50,6 +59,16 @@ class Res():
 
     else:
       exit()
+
+
+  def Start(self, flag):
+    if flag:
+      self.nums.Set(self.setting.digit, self.setting.count, self.setting.speed)
+
+    self.nums.Create()
+    self.nums.View()
+
+    return self.Question()
 
 
   def Question(self):
@@ -76,4 +95,18 @@ class Res():
     print(
       str(sum_num) + ' ' + str(self.nums.nums).replace(',', ' +') + '\n\n'
       + 'あなたの答え: ' + anser + '\n'
+    )
+
+    return self.Continue()
+
+
+  def Continue(self):
+    print('続ける？\n')
+
+    return self.InputCheck(
+      input(
+        'y: このまま続ける\n'
+        + 's: 設定を変える\n'
+        + 'q: さようなら\n'
+      ), 1
     )

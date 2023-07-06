@@ -9,10 +9,14 @@ class Nums(Setting):
     self.nums = []
     self.u_bar = ''
 
-  def Create(self, digit, count, speed):
+
+  def Set(self, digit, count, speed):
     self.digit = digit
     self.count = count
     self.speed = (10 - speed) / 10
+
+
+  def Create(self):
     self.nums = []
 
     for i in range(self.count):
