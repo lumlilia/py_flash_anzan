@@ -1,10 +1,9 @@
 import time
 import random
 import os
-from setting_class import Setting
 
 
-class Nums(Setting):
+class Nums():
   def __init__(self):
     self.nums = []
     self.u_bar = ''
