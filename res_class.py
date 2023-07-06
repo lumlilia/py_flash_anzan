@@ -94,7 +94,7 @@ class Res():
 
     print(
       str(sum_num) + ' ' + str(self.nums.nums).replace(',', ' +') + '\n\n'
-      + 'あなたの答え: ' + anser + '\n'
+      + 'あなたの答え: ' + anser + '\n\n'
     )
 
     return self.Continue()
