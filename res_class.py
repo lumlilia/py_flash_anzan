@@ -1,5 +1,6 @@
 import os
 import math
+import const
 from nums_class import Nums
 from setting_class import Setting
 
@@ -16,13 +17,15 @@ class Res():
 
 
   def Title(self):
-    os.system('clear')
+    os.system(const.CLEAR_CMD)
 
     print(
       'フラッシュ暗算\n'
-      + '桁数: ' + str(self.setting.digit) + ' / '
-      + '回数: ' + str(self.setting.count) + ' / '
-      + '速度: ' + str(self.setting.speed) + '\n\n'
+      + '桁数: ' + str(self.setting.data['digit']) + ' / '
+      + '回数: ' + str(self.setting.data['count']) + ' / '
+      + '速度: ' + str(self.setting.data['speed'])
+      + (' / S乱' if self.setting.data['s-random'] else '')
+      + '\n\n'
       + '準備はいいか？野郎ども\n\n'
     )
 
@@ -41,7 +44,7 @@ class Res():
         return self.Title()
 
       elif mode == 1:
-        os.system('clear')
+        os.system(const.CLEAR_CMD)
         return self.Continue()
 
       else:
@@ -63,7 +66,7 @@ class Res():
 
   def Start(self, flag):
     if flag:
-      self.nums.Set(self.setting.digit, self.setting.count, self.setting.speed)
+      self.nums.Set(self.setting.data)
 
     self.nums.Create()
     self.nums.View()
@@ -72,18 +75,18 @@ class Res():
 
 
   def Question(self):
-    anser = input('合計は？')
+    anser = input('合計は？\n')
 
     try:
       int(anser)
 
     except ValueError:
-      os.system('clear')
+      os.system(const.CLEAR_CMD)
       print('数字を入力してください')
 
       return self.Question()
 
-    os.system('clear')
+    os.system(const.CLEAR_CMD)
     sum_num = sum(self.nums.nums)
 
     if int(anser) == sum_num:

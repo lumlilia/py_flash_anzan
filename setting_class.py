@@ -1,19 +1,33 @@
 import os
 import math
 import re
+import json
+import const
 
 
 class Setting():
   def __init__(self):
-    self.digit = 1
-    self.count = 5
-    self.speed = 4
+    if os.path.isfile(const.CONFIG_FILE):
+      with open(const.CONFIG_FILE, encoding='utf-8') as f:
+        self.data = json.loads(f.read())
+
+    else:
+      self.data = ({
+        'digit': 1,
+        'count': 5,
+        'speed': 4,
+        's-random': False
+      })
+
+      with open(const.CONFIG_FILE, mode='w', encoding='utf-8') as f:
+        f.write(json.dumps(self.data, indent=2))
 
     self.char_arr = ([
       'd', 'D',  # Digit
       'c', 'C',  # Count
       's', 'S',  # Speed
-      'q', 'Q'   # quit
+      'r', 'R',  # super Random mode
+      'q', 'Q'   # Quit
     ])
 
     self.set_texts = ([
@@ -24,7 +38,7 @@ class Setting():
 
 
   def SettingTop(self):
-    os.system('clear')
+    os.system(const.CLEAR_CMD)
 
     print('設定めにゅ〜\n')
     
@@ -44,9 +58,25 @@ class Setting():
       if char_i < 3:
         return self.Set(char_i)
 
+      elif char_i == 3:
+        self.data['s-random'] = not self.data['s-random']
+
+        os.system(const.CLEAR_CMD)
+        input(
+          'SuperRandomMode: '
+          + ('ON' if self.data['s-random'] else 'OFF')
+          + '\n(press keys)\n'
+        )
+
+        return self.SettingTop()
+
+      else:
+        with open(const.CONFIG_FILE, mode='w', encoding='utf-8') as f:
+          f.write(json.dumps(self.data, indent=2))
+
 
   def Set(self, mode):
-    os.system('clear')
+    os.system(const.CLEAR_CMD)
     mode_i = mode * 2
     num_range = self.set_texts[mode_i + 1]
 
@@ -68,13 +98,13 @@ class Setting():
       n = int(instr)
 
       if mode == 0:
-        self.digit = n
+        self.data['digit'] = n
 
       elif mode == 1:
-        self.count = n
+        self.data['count'] = n
 
       elif mode == 2:
-        self.speed = n
+        self.data['speed'] = n
       
       input(
         self.set_texts[mode_i][0:2] + ' を '

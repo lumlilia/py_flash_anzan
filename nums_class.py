@@ -1,6 +1,7 @@
 import time
 import random
 import os
+import const
 
 
 class Nums():
@@ -9,10 +10,11 @@ class Nums():
     self.u_bar = ''
 
 
-  def Set(self, digit, count, speed):
-    self.digit = digit
-    self.count = count
-    self.speed = (10 - speed) / 10
+  def Set(self, data_arr):
+    self.digit = data_arr['digit']
+    self.count = data_arr['count']
+    self.speed = (10 - data_arr['speed']) / 10
+    self.sr = data_arr['s-random']
 
 
   def Create(self):
@@ -20,7 +22,8 @@ class Nums():
 
     for i in range(self.count):
       dig_base = 10 ** self.digit
-      self.nums.append(random.randint(dig_base / 10, dig_base - 1))
+      rand_min = 1 if self.sr else dig_base / 10
+      self.nums.append(random.randint(rand_min, dig_base - 1))
 
     self.u_bar = ''
 
@@ -30,7 +33,7 @@ class Nums():
 
   def View(self):
     for i in range(6):
-      os.system('clear')
+      os.system(const.CLEAR_CMD)
 
       if i % 2 == 0:
         print(self.u_bar)
@@ -38,10 +41,10 @@ class Nums():
       time.sleep(0.5)
 
     for n in self.nums:
-      os.system('clear')
+      os.system(const.CLEAR_CMD)
       print(n)
       time.sleep(self.speed)
-      os.system('clear')
+      os.system(const.CLEAR_CMD)
       time.sleep(self.speed / 2)
 
-    os.system('clear')
+    os.system(const.CLEAR_CMD)
