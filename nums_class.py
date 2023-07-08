@@ -21,8 +21,13 @@ class Nums():
     self.nums = []
 
     for i in range(self.count):
-      dig_base = 10 ** self.digit
-      rand_min = 1 if self.sr else dig_base / 10
+      if self.sr:
+        dig_base = 10 ** random.randint(1, self.digit)
+
+      else:
+        dig_base = 10 ** self.digit
+
+      rand_min = dig_base / 10
       self.nums.append(random.randint(rand_min, dig_base - 1))
 
     self.u_bar = ''
@@ -42,7 +47,7 @@ class Nums():
 
     for n in self.nums:
       os.system(const.CLEAR_CMD)
-      print(n)
+      print(str(n).rjust(self.digit))
       time.sleep(self.speed)
       os.system(const.CLEAR_CMD)
       time.sleep(self.speed / 2)
