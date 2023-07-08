@@ -7,21 +7,6 @@ import const
 
 class Setting():
   def __init__(self):
-    if os.path.isfile(const.CONFIG_FILE):
-      with open(const.CONFIG_FILE, encoding='utf-8') as f:
-        self.data = json.loads(f.read())
-
-    else:
-      self.data = ({
-        'digit': 1,
-        'count': 5,
-        'speed': 4,
-        's-random': False
-      })
-
-      with open(const.CONFIG_FILE, mode='w', encoding='utf-8') as f:
-        f.write(json.dumps(self.data, indent=2))
-
     self.char_arr = ([
       'd', 'D',  # Digit
       'c', 'C',  # Count
@@ -31,10 +16,32 @@ class Setting():
     ])
 
     self.set_texts = ([
-      '桁数を設定してね ', '[1-5]',
+      '桁数を設定してね ', '[1-9]',
       '回数を設定してね ', '[2-9]',
       '速度を設定してね ', '[1-9]',
     ])
+
+    if os.path.isfile(const.CONFIG_FILE):
+      with open(const.CONFIG_FILE, encoding='utf-8') as f:
+        try:
+          self.data = json.loads(f.read())
+
+        except:
+          self.DataInit(True)
+
+        else:
+          d_name = ['digit', 'count', 'speed', 's-random']
+
+          if d_name == list(self.data.keys()):
+            for i in range(3):
+              if not re.fullmatch(self.set_texts[i * 2 + 1], str(self.data[d_name[i]])):
+                self.DataInit(True)
+                break
+          else:
+            self.DataInit(True)
+
+    else:
+      self.DataInit(False)
 
 
   def SettingTop(self):
@@ -85,7 +92,7 @@ class Setting():
       + num_range + '\n'
     )
 
-    if re.fullmatch(num_range, instr) == None:
+    if not re.fullmatch(num_range, instr):
       input(
         '\nError!!\n'
         + num_range[1:2] + '〜' + num_range[3:4]
@@ -112,3 +119,18 @@ class Setting():
       )
 
     return self.SettingTop()
+
+
+  def DataInit(self, flag):
+    self.data = ({
+      'digit': 1,
+      'count': 5,
+      'speed': 4,
+      's-random': False
+    })
+
+    with open(const.CONFIG_FILE, mode='w', encoding='utf-8') as f:
+      f.write(json.dumps(self.data, indent=2))
+
+    if flag:
+      input('Error!!\n\nconfig.jsonが不正です。\n設定を初期化しました。\n')
